@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: calculate-pi
+spec:
+  containers:
+  - name: pi
+    image: python:3.11-slim
+    command: ["python", "-c"]
+    args:
+      - |
+        import random
+        n = 1000000
+        inside = sum(1 for _ in range(n) if (random.random()**2 + random.random()**2) < 1)
+        print(f"Approximate Pi = {4 * inside / n}")
+  restartPolicy: Never
+
