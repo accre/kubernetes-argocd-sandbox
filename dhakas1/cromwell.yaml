@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cromwell
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cromwell
+  template:
+    metadata:
+      labels:
+        app: cromwell
+    spec:
+      containers:
+        - name: cromwell
+          image: broadinstitute/cromwell:85
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: config
+              mountPath: /cromwell/cromwell.conf
+              subPath: cromwell.conf
+      volumes:
+        - name: config
+          configMap:
+            name: cromwell-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cromwell
+spec:
+  selector:
+    app: cromwell
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: ClusterIP
