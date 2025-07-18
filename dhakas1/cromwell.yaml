@@ -21,6 +21,12 @@ spec:
             - name: config
               mountPath: /cromwell/cromwell.conf
               subPath: cromwell.conf
+          command: ["java"]
+          args: [
+            "-Dconfig.file=/cromwell/cromwell.conf",
+            "-jar", "/cromwell/cromwell.jar",
+            "server"
+          ]
       volumes:
         - name: config
           configMap:
