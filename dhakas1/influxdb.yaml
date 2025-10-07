@@ -5,24 +5,6 @@ metadata:
   name: monitoring
 
 ---
-# InfluxDB ConfigMap
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: influxdb-config
-  namespace: monitoring
-data:
-  influxdb.conf: |
-    [meta]
-      dir = "/var/lib/influxdb/meta"
-    [data]
-      dir = "/var/lib/influxdb/data"
-      engine = "tsm1"
-    [http]
-      enabled = true
-      bind-address = ":8086"
-
----
 # InfluxDB PersistentVolumeClaim
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -84,16 +66,10 @@ spec:
         volumeMounts:
         - name: influxdb-storage
           mountPath: /var/lib/influxdb
-        - name: influxdb-config
-          mountPath: /etc/influxdb/influxdb.conf
-          subPath: influxdb.conf
       volumes:
       - name: influxdb-storage
         persistentVolumeClaim:
           claimName: influxdb-pvc
-      - name: influxdb-config
-        configMap:
-          name: influxdb-config
 
 ---
 # InfluxDB Service
